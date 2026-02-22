@@ -4,10 +4,14 @@ import com.exhnil.arkenstone.dto.UserDTO;
 import com.exhnil.arkenstone.entities.UserEntity;
 import com.exhnil.arkenstone.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -17,7 +21,12 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public boolean login(@RequestBody UserDTO user){
-        return authService.login(user);
+    public ResponseEntity<?> login(@RequestBody UserDTO user){
+        Optional<UserEntity> userE = authService.login(user);
+
+        if(userE.isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(userE.get());
     }
 }

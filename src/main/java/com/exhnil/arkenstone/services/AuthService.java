@@ -1,6 +1,5 @@
 package com.exhnil.arkenstone.services;
 
-import com.exhnil.arkenstone.dto.LoginRequest;
 import com.exhnil.arkenstone.dto.UserDTO;
 import com.exhnil.arkenstone.entities.UserEntity;
 import com.exhnil.arkenstone.repositories.UserRepository;
@@ -15,8 +14,10 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean login(UserDTO request) {
+    public Optional<UserEntity> login(UserDTO request) {
         Optional<UserEntity> user = userRepository.findByEmail(request.getEmail());
-        return user.isPresent();
+        if(user.isEmpty()) return Optional.empty();
+        if(!user.get().getPassword().equals(request.getPassword())) return Optional.empty();
+        return user;
     }
 }

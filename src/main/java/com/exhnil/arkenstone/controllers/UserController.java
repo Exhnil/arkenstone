@@ -4,11 +4,8 @@ import com.exhnil.arkenstone.dto.UserDTO;
 import com.exhnil.arkenstone.entities.UserEntity;
 import com.exhnil.arkenstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -17,13 +14,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @GetMapping("/users")
-    public ResponseEntity<?> getUser() {
-        Map<String,String> response = new HashMap<>();
-
-        return ResponseEntity.ok(response);
-    }
 
     @PostMapping("/user")
     public Optional<UserEntity> getUserByEmail(@RequestBody UserDTO user){
