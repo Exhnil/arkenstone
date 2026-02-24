@@ -1,5 +1,6 @@
 package com.exhnil.arkenstone.controllers;
 
+import com.exhnil.arkenstone.dto.UserCredentials;
 import com.exhnil.arkenstone.dto.UserDTO;
 import com.exhnil.arkenstone.entities.UserEntity;
 import com.exhnil.arkenstone.services.UserService;
@@ -15,16 +16,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping()
+    public String hello() {
+        return "Hello World";
+    }
+
     @PostMapping("/user")
-    public Optional<UserEntity> getUserByEmail(@RequestBody UserDTO user){
-        Optional<UserEntity> userEntity= userService.findByEmail(user.getEmail());
+    public Optional<UserEntity> getUserByEmail(@RequestBody UserCredentials request){
+        Optional<UserEntity> userEntity= userService.findByEmail(request.getEmail());
         System.out.println(userEntity.isPresent());
         return userEntity;
     }
 
     @PostMapping("/register")
     public UserEntity saveUser(@RequestBody UserDTO user) {
-        UserEntity userEntity =  new UserEntity(user.getEmail(),user.getPassword());
-        return userService.saveUser(userEntity);
+        return userService.saveUser(user);
     }
 }

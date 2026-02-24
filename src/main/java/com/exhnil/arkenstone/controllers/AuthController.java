@@ -1,7 +1,7 @@
 package com.exhnil.arkenstone.controllers;
 
+import com.exhnil.arkenstone.dto.UserCredentials;
 import com.exhnil.arkenstone.dto.UserDTO;
-import com.exhnil.arkenstone.entities.UserEntity;
 import com.exhnil.arkenstone.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +21,8 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDTO user){
-        Optional<UserEntity> userE = authService.login(user);
+    public ResponseEntity<?> login(@RequestBody UserCredentials creds){
+        Optional<UserDTO> userE = authService.login(creds);
 
         if(userE.isEmpty()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
