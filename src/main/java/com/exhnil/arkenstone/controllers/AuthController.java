@@ -1,7 +1,6 @@
 package com.exhnil.arkenstone.controllers;
 
 import com.exhnil.arkenstone.dto.UserCredentials;
-import com.exhnil.arkenstone.dto.UserDTO;
 import com.exhnil.arkenstone.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -21,12 +21,12 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserCredentials creds){
-        Optional<UserDTO> userE = authService.login(creds);
+    public ResponseEntity<?> login(@RequestBody UserCredentials creds) {
+        Optional<String> token = authService.login(creds);
 
-        if(userE.isEmpty()){
+        if (token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(userE.get());
+        return ResponseEntity.ok(Map.of("token", token));
     }
 }

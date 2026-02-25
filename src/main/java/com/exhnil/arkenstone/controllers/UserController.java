@@ -4,9 +4,9 @@ import com.exhnil.arkenstone.dto.UserCredentials;
 import com.exhnil.arkenstone.entities.UserEntity;
 import com.exhnil.arkenstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -20,11 +20,9 @@ public class UserController {
         return "Hello World";
     }
 
-    @PostMapping("/user")
-    public Optional<UserEntity> getUserByEmail(@RequestBody UserCredentials request){
-        Optional<UserEntity> userEntity= userService.findByEmail(request.getEmail());
-        System.out.println(userEntity.isPresent());
-        return userEntity;
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserByEmail(Authentication authentication) {
+        return ResponseEntity.ok(authentication.getName());
     }
 
     @PostMapping("/register")
