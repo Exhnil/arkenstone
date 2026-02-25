@@ -34,6 +34,9 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createdAt;

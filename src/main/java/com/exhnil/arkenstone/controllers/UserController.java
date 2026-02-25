@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> getUserByEmail(Authentication authentication) {
+    public ResponseEntity<String> getUserByEmail(Authentication authentication) {
         return ResponseEntity.ok(authentication.getName());
     }
 

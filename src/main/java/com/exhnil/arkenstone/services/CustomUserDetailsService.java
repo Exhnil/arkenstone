@@ -3,6 +3,7 @@ package com.exhnil.arkenstone.services;
 import com.exhnil.arkenstone.entities.UserEntity;
 import com.exhnil.arkenstone.repositories.UserRepository;
 import org.jspecify.annotations.NullMarked;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 userEntity.getEmail(),
                 userEntity.getPassword(),
-                List.of()
+                List.of(new SimpleGrantedAuthority(userEntity.getRole().name()))
         );
     }
 }
