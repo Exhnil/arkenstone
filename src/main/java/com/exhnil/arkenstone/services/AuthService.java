@@ -1,9 +1,10 @@
 package com.exhnil.arkenstone.services;
 
-import com.exhnil.arkenstone.dto.UserDTO;
-import com.exhnil.arkenstone.entities.UserEntity;
+import com.exhnil.arkenstone.dto.LoginResponse;
+import com.exhnil.arkenstone.dto.UserCredentials;
 import com.exhnil.arkenstone.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,10 +15,17 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<UserEntity> login(UserDTO request) {
-        Optional<UserEntity> user = userRepository.findByEmail(request.getEmail());
-        if(user.isEmpty()) return Optional.empty();
-        if(!user.get().getPassword().equals(request.getPassword())) return Optional.empty();
-        return user;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
+
+    public Optional<LoginResponse> login(UserCredentials request) {
+        return userRepository.findByEmail(request.getEmail())
+                .filter(u -> passwordEncoder.matches(request.getPassword(), u.getPassword())).map(u -> {
+                    String jwt = jwtService.generateToken(u);
+                    return new LoginResponse(jwt, u);
+                });
     }
 }
