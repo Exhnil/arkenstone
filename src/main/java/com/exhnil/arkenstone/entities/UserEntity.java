@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name="users")
+@Table(name = "users")
 public class UserEntity {
 
     public UserEntity(String email, String password) {
@@ -20,10 +20,11 @@ public class UserEntity {
         this.password = password;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.role = Role.ROLE_USER;
     }
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
 

@@ -1,7 +1,9 @@
 package com.exhnil.arkenstone.controllers;
 
+import com.exhnil.arkenstone.dto.LoginResponse;
 import com.exhnil.arkenstone.dto.UserCredentials;
 import com.exhnil.arkenstone.services.AuthService;
+import com.exhnil.arkenstone.services.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +22,24 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserCredentials creds) {
-        Optional<String> token = authService.login(creds);
+        Optional<LoginResponse> loginResponse = authService.login(creds);
 
-        if (token.isEmpty()) {
+        if (loginResponse.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(Map.of("token", token));
+
+        String refreshToken = refreshTokenService.createRefreshToken(loginResponse.get().getUser());
+
+        return ResponseEntity.ok(Map.of("accessToken", loginResponse.get().getToken(), "refreshToken", refreshToken));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@RequestBody String refreshToken) {
+        return ResponseEntity.ok(refreshTokenService.refresh(refreshToken));
     }
 }
