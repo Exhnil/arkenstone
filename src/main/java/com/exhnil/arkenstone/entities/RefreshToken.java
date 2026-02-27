@@ -2,10 +2,12 @@ package com.exhnil.arkenstone.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
 @Data
 public class RefreshToken {
 
@@ -24,10 +26,9 @@ public class RefreshToken {
 
     private LocalDateTime expires;
 
-    @ManyToOne
-    private UserEntity user;
-
     private boolean revoked;
 
+    @ManyToOne
+    private UserEntity user;
 
 }
